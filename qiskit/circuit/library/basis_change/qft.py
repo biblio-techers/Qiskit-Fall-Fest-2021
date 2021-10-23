@@ -82,6 +82,7 @@ class QFT(BlueprintCircuit):
         do_swaps: bool = True,
         inverse: bool = False,
         insert_barriers: bool = False,
+        full: bool = False,
         name: Optional[str] = None,
     ) -> None:
         """Construct a new QFT circuit.
@@ -95,10 +96,6 @@ class QFT(BlueprintCircuit):
             name: The name of the circuit.
         """
 
-        #####
-        print("Hello")
-        #####
-
         if name is None:
             name = "IQFT" if inverse else "QFT"
 
@@ -107,6 +104,7 @@ class QFT(BlueprintCircuit):
         self._do_swaps = do_swaps
         self._insert_barriers = insert_barriers
         self._inverse = inverse
+        self._full = full
         self._data = None
         self.num_qubits = num_qubits
 
@@ -205,6 +203,27 @@ class QFT(BlueprintCircuit):
             self._invalidate()
             self._do_swaps = do_swaps
 
+    @property
+    def full(self) -> bool:
+        """Whether the full QFT circuit composed out of the individual gates is drawn 
+        or just the one QFT building block.
+
+        Returns:
+            True, if full circuit composed out of individual gates is drawn, False if not
+        """
+        return self._full
+
+    @full.setter
+    def full(self, full: bool) -> None:
+        """Specify whether to draw the full QFT circuit composed out of the individual
+        gates is drawn or just the one QFT building block.
+        Args:
+            full: If True, full circuit composed out of individual gates is drawn,  if False then not
+        """
+        if full != self._full:
+            self._invalidate()
+            self._full = full
+
     def is_inverse(self) -> bool:
         """Whether the inverse Fourier transform is implemented.
 
@@ -268,7 +287,7 @@ class QFT(BlueprintCircuit):
                 lam = np.pi / (2 ** (j - k))
                 circuit.cp(lam, j, k)
 
-            if self.insert_barriers:
+            if self._insert_barriers:
                 circuit.barrier()
 
         if self._do_swaps:
@@ -278,5 +297,8 @@ class QFT(BlueprintCircuit):
         if self._inverse:
             circuit._data = circuit.inverse()
 
-        wrapped = circuit.to_instruction() if self.insert_barriers else circuit.to_gate()
-        self.compose(wrapped, qubits=self.qubits, inplace=True)
+        if self._full:
+            self.compose(circuit, qubits=self.qubits, inplace=True)
+        else:
+            wrapped = circuit.to_instruction() if self._insert_barriers else circuit.to_gate()
+            self.compose(wrapped, qubits=self.qubits, inplace=True)
