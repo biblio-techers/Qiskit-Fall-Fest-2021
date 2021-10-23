@@ -1,0 +1,3 @@
+[qiskit.unitary_synthesis]
+default = qiskit.transpiler.passes.synthesis.unitary_synthesis:DefaultUnitarySynthesis
+

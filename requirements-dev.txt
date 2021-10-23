@@ -27,6 +27,5 @@ pygments>=2.4
 networkx>=2.2
 scikit-learn>=0.20.0
 scikit-quant<=0.7;platform_system != 'Windows'
-jax;platform_system != 'Windows'
-jaxlib;platform_system != 'Windows'
+jax<=0.2.24;platform_system != 'Windows'
 docplex

@@ -94,6 +94,11 @@ class QFT(BlueprintCircuit):
             insert_barriers: If True, barriers are inserted as visualization improvement.
             name: The name of the circuit.
         """
+
+        #####
+        print("Hello")
+        #####
+
         if name is None:
             name = "IQFT" if inverse else "QFT"
 
