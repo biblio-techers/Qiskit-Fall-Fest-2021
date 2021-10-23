@@ -83,6 +83,7 @@ class QFT(BlueprintCircuit):
         inverse: bool = False,
         insert_barriers: bool = False,
         name: Optional[str] = None,
+        full: bool = False,
     ) -> None:
         """Construct a new QFT circuit.
 
@@ -90,13 +91,14 @@ class QFT(BlueprintCircuit):
             num_qubits: The number of qubits on which the QFT acts.
             approximation_degree: The degree of approximation (0 for no approximation).
             do_swaps: Whether to include the final swaps in the QFT.
+            full: 
             inverse: If True, the inverse Fourier transform is constructed.
             insert_barriers: If True, barriers are inserted as visualization improvement.
             name: The name of the circuit.
         """
 
         #####
-        print("Hello")
+        print("Hello_init")
         #####
 
         if name is None:
@@ -107,8 +109,10 @@ class QFT(BlueprintCircuit):
         self._do_swaps = do_swaps
         self._insert_barriers = insert_barriers
         self._inverse = inverse
+        self._full = full
         self._data = None
         self.num_qubits = num_qubits
+
 
     @property
     def num_qubits(self) -> int:
@@ -205,6 +209,26 @@ class QFT(BlueprintCircuit):
             self._invalidate()
             self._do_swaps = do_swaps
 
+    @property
+    def full(self) -> bool:
+        """Whether the final circuit of the QFT is displayed in full or not.
+
+        Returns:
+            True, if the cirucit is printed in full, and false if not.
+        """
+        return self._full
+
+    @full.setter
+    def full(self, full: bool) -> None:
+        """Specify whether to print the full circuit or not.
+
+        Args:
+            full: If True, the full circuit is displayed, if False not.
+        """
+        if full != self._full:
+            self._invalidate()
+            self._full = full
+
     def is_inverse(self) -> bool:
         """Whether the inverse Fourier transform is implemented.
 
@@ -261,6 +285,8 @@ class QFT(BlueprintCircuit):
             return
 
         circuit = QuantumCircuit(*self.qregs, name=self.name)
+        print("hello_build")
+        
         for j in reversed(range(num_qubits)):
             circuit.h(j)
             num_entanglements = max(0, j - max(0, self.approximation_degree - (num_qubits - j - 1)))
@@ -277,6 +303,8 @@ class QFT(BlueprintCircuit):
 
         if self._inverse:
             circuit._data = circuit.inverse()
-
         wrapped = circuit.to_instruction() if self.insert_barriers else circuit.to_gate()
-        self.compose(wrapped, qubits=self.qubits, inplace=True)
+        if  self._full==True:
+            self.compose(circuit, qubits=self.qubits, inplace=True)
+        else:
+            self.compose(wrapped, qubits=self.qubits, inplace=True)

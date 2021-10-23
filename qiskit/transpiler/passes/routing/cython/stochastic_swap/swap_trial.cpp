@@ -5,9 +5,7 @@
     "distutils": {
         "depends": [],
         "extra_compile_args": [
-            "-O2",
-            "-funroll-loops",
-            "-std=c++11"
+            "/O2"
         ],
         "language": "c++",
         "name": "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial",
@@ -879,9 +877,9 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "qiskit/transpiler/passes/routing/cython/stochastic_swap/swap_trial.pyx",
+  "qiskit\\transpiler\\passes\\routing\\cython\\stochastic_swap\\swap_trial.pyx",
   "stringsource",
-  "qiskit/transpiler/passes/routing/cython/stochastic_swap/utils.pxd",
+  "qiskit\\transpiler\\passes\\routing\\cython\\stochastic_swap\\utils.pxd",
 };
 /* MemviewSliceStruct.proto */
 struct __pyx_memoryview_obj;
@@ -2053,7 +2051,7 @@ static const char __pyx_k_Out_of_bounds_on_buffer_access_a[] = "Out of bounds on
 static const char __pyx_k_Unable_to_convert_item_to_object[] = "Unable to convert item to object";
 static const char __pyx_k_got_differing_extents_in_dimensi[] = "got differing extents in dimension %d (got %d and %d)";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
-static const char __pyx_k_qiskit_transpiler_passes_routing[] = "qiskit/transpiler/passes/routing/cython/stochastic_swap/swap_trial.pyx";
+static const char __pyx_k_qiskit_transpiler_passes_routing[] = "qiskit\\transpiler\\passes\\routing\\cython\\stochastic_swap\\swap_trial.pyx";
 static const char __pyx_k_unable_to_allocate_shape_and_str[] = "unable to allocate shape and strides.";
 static const char __pyx_k_qiskit_transpiler_passes_routing_2[] = "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial";
 static PyObject *__pyx_n_s_ASCII;

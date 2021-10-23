@@ -5,9 +5,7 @@
     "distutils": {
         "depends": [],
         "extra_compile_args": [
-            "-O2",
-            "-funroll-loops",
-            "-std=c++11"
+            "/O2"
         ],
         "language": "c++",
         "name": "qiskit.transpiler.passes.routing.cython.stochastic_swap.utils",
@@ -863,7 +861,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "qiskit/transpiler/passes/routing/cython/stochastic_swap/utils.pyx",
+  "qiskit\\transpiler\\passes\\routing\\cython\\stochastic_swap\\utils.pyx",
   "stringsource",
 };
 

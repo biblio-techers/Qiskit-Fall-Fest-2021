@@ -11,6 +11,9 @@ qiskit/execute_function.py
 qiskit/user_config.py
 qiskit/util.py
 qiskit/version.py
+qiskit/quantum_info/states/cython/exp_value.cpp
+qiskit/transpiler/passes/routing/cython/stochastic_swap/swap_trial.cpp
+qiskit/transpiler/passes/routing/cython/stochastic_swap/utils.cpp
 qiskit/algorithms/__init__.py
 qiskit/algorithms/algorithm_result.py
 qiskit/algorithms/exceptions.py
@@ -473,6 +476,10 @@ qiskit/qasm/exceptions.py
 qiskit/qasm/qasm.py
 qiskit/qasm/qasmlexer.py
 qiskit/qasm/qasmparser.py
+qiskit/qasm3/__init__.py
+qiskit/qasm3/ast.py
+qiskit/qasm3/exporter.py
+qiskit/qasm3/printer.py
 qiskit/qasm/libs/qelib1.inc
 qiskit/qasm/libs/stdgates.inc
 qiskit/qasm/node/__init__.py
@@ -506,10 +513,6 @@ qiskit/qasm/node/unaryoperator.py
 qiskit/qasm/node/universalunitary.py
 qiskit/qasm/pygments/__init__.py
 qiskit/qasm/pygments/lexer.py
-qiskit/qasm3/__init__.py
-qiskit/qasm3/ast.py
-qiskit/qasm3/exporter.py
-qiskit/qasm3/printer.py
 qiskit/qobj/__init__.py
 qiskit/qobj/common.py
 qiskit/qobj/pulse_qobj.py
