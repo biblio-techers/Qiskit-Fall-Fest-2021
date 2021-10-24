@@ -34,7 +34,7 @@ for i in list(range(len(circuit.data)))[::-1]:
             circuit.data.pop(i)
             break
 ```
-The brains of this method comes from the following list comprehension, which reviews the data list of the quantum circuit, and identifies & removes the requied gate entries as specified by the user.
+The brains of this method comes from the above code snip, which reviews the data list of the quantum circuit, and identifies & removes the requied gate entries as specified by the user.
 The function then returns an updated quantum circuit.
 
 ## Next steps
