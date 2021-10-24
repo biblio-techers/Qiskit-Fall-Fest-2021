@@ -2252,9 +2252,10 @@ class QuantumCircuit:
         """Removes certain gates from certain qubits of the QuantumCircuit and return the 
         adapted QuantumCircuit with the deleted gates.
         Args:
-            gates_to_remove (str or list(str)): optional subset of gates to
+            gates_to_remove (str, list(str), int, list(int)): optional subset of gates to
             remove from QuantumCircuit, defaults to all gates in circuit.
-            qubits (int or list(int)): specify qubits from which the gates should be removed 
+            qubits (int or list(int)): specify qubits from which the gates should be removed,
+            defaults to all qubits 
         Returns:
             Adapted QuatumCircuit object with removed gates
         """
