@@ -5,6 +5,53 @@
 
 Qiskit is made up of elements that work together to enable quantum computing. This element is **Terra** and is the foundation on which the rest of Qiskit is built.
 
+# PushQuantum Hackathon Presentation
+We have cloned from the original Qiskit Terra repository and added new functionality to:
+* remove targeted gates from a pre-defined quantum circuit,
+    * qiskit/circuit/quantumcircuit.py - def remove_gates()
+* implement a QFT circuit in its fully expanded form.
+    * qiskit/circuit/library/basis_change/qft.py
+
+## How did we get here?
+Our initial idea was to add functionality to enable users to expand the quantum circuit drawing of a base circuit (e.g. QFT) from a
+building block to a full display form. For example:
+![Image of QFT Full/Compact](https://github.com/biblio-techers/Qiskit-Fall-Fest-2021/blob/nadeem_develop/Images/Example_Of_Decomposition.png)
+As a next step we wanted to enable this functionality in the general case, and hence apply it to the quantum circuit class. This was 
+when we realised that this functionality already exists in the form of the decompose method. However, this decompose method also
+decomposes the Hadamard gates for our QFT example, so there are some minor differences.
+## If at first, you don't succeed... try something else
+Given that this functionality had already been implemented, we continued with our extension idea: "Provide a clean and friendly way to 
+allow users to remove targeted gates from their quantum circuits". There is a brief discussion of how to currently do this in:
+https://arxiv.org/abs/1903.04359
+The advise in lesson 2 is to directly edit the quantumcircuit.data list based on the index of the gate that you want to move. This can be a complex thought process for the user and it is much more intuitive to pick a gate from the diagram that you want to remove. This becomes even more apparent when you consider the indexing structure of the data list is not unique if it contains single qubit gates.
+## Functionality of the remove_gate method
+The method takes two arguments, qubits, and gates_to_remove. Qubits are the qubits for which you want to target gate removal. gates_to_remove are the gates which you want to target for removal. These can either be strigs, indicating the names which you want to remove, or integers, indicating which gates along the circuit you want to remove. If both are present, then the function removes the specified gates only on the specified qubits. If none are present, then all gates are removed.
+```python
+for i in list(range(len(circuit.data)))[::-1]:
+    for j in list(range(len(circuit.data[i][1])))[::-1]:
+        if (circuit.data[i][1][j].index in qubits and 
+            circuit.data[i][0].name in gates_to_remove):
+            circuit.data.pop(i)
+            break
+```
+The brains of this method comes from the above code snip, which reviews the data list of the quantum circuit, and identifies & removes the requied gate entries as specified by the user.
+The function then returns an updated quantum circuit.
+
+## Next steps
+We would like to follow the object orientated style of the qiskit source code. This requires us to create the above method as a class inheriting from quantumcircuit and returning a removed_gates type object. This will allow us to:
+* Reduce the amount of content in the quantumcircuit.py file given that it is already very large
+* Keep to the convention of the qiskit source code such that our contribution fits nicely
+* Take advantage of the object orientated structure of qiskit when we look to expand our contribution to more features. There are many more ways a user may want to remove gates from a circuit, each worthy of their own method.
+
+## Future work and outlook
+Removing gates is the simplest form of amending an existing quantum circuit given that it is well defined and has finite implementations. However, it would also be benifitial to the user to have a similar class/method to conduct other ciruit altering functions such as:
+* Swapping gates,
+* Adding gates at specified locations,
+* Duplicating gates
+After implementing the remove gates functionality as a class we look to extend this to the above use cases for as broad as possible implementation and potentially provide it as a mini feature update to the main qiskit-terra source code. We also welcome feedback and other ideas of analogous features to implement.
+
+# Standard README.md documentation from Qiskit
+
 ## Installation
 
 We encourage installing Qiskit via the pip tool (a python package manager), which installs all Qiskit elements, including Terra.
