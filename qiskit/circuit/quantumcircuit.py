@@ -2260,6 +2260,11 @@ class QuantumCircuit:
         """
 
         circuit = self.copy()
+        all_gates=[]
+        try:
+            all_gates=list(set(circuit.data[i][0].name for i in range(len(self.data)))) 
+        except IndexError:
+            print("Your circuit is already empty.")
         all_gates=list(set(circuit.data[i][0].name for i in range(len(self.data)))) 
         if type(qubits)==int:
             qubits=[qubits]
@@ -2268,10 +2273,7 @@ class QuantumCircuit:
         if qubits==None:
             qubits=list(range(circuit.num_qubits))
         if gates_to_remove==None:
-            try:
-                gates_to_remove=all_gates      
-            except IndexError:
-                print("Your circuit is already empty.")
+            gates_to_remove=all_gates      
         missing_gates=[]
         for gate in gates_to_remove:
             if gate not in all_gates:
@@ -2279,6 +2281,11 @@ class QuantumCircuit:
         if len(missing_gates)!=0:
             print(f"WARNING: Gates: {missing_gates} are not present in your circuit. Your ciruit\
             only contains the following gates: {all_gates}.")
+        for qubit in qubits:
+            if qubit > circuit.num_qubits:
+                print(f"WARNING: Your circuit only contains {circuit.num_qubits} qubits. Qubit\
+                    {qubit} does not exist.")
+            break
         # Go through circuit.data containing the instructions and the information which
         # qubits they are acting on and delete the entry from the data list if a gate should
         # be removed. (i,j) lists run in reverse order to avoid index jumping.
@@ -2293,8 +2300,10 @@ class QuantumCircuit:
             return circuit
         except IndexError:
             print("IndexError: Check the number of qubits in your circuit.")
+            return circuit
         except TypeError:
             print("TypeError: Check the type requirements of the remove_gates arguments.")
+            return circuit
 
 
 
