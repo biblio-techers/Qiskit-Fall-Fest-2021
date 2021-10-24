@@ -21,10 +21,26 @@ allow users to remove targeted gates from their quantum circuits". There is a br
 https://arxiv.org/abs/1903.04359
 The advise in lesson 2 is to directly edit the quantumcircuit.data list based on the index of the gate that you want to move. This can be a complex thought process for the user and it is much more intuitive to pick a gate from the diagram that you want to remove. This becomes even more apparent when you consider the indexing structure of the data list is not unique if it contains single qubit gates.
 ## Functionality of the remove_gate method
+The method takes two arguments, qubits, and gates_to_remove. Qubits are the qubits for which you want to target gate removal. gates_to_remove are the gates which you want to target for removal. These can either be strigs, indicating the names which you want to remove, or integers, indicating which gates along the circuit you want to remove. If both are present, then the function removes the specified gates only on the specified qubits. If none are present, then all gates are removed.
+```python
+for i in list(range(len(circuit.data)))[::-1]:
+    for j in list(range(len(circuit.data[i][1])))[::-1]:
+        if (circuit.data[i][1][j].index in qubits and 
+            circuit.data[i][0].name in gates_to_remove):
+            circuit.data.pop(i)
+            break
+```
+The brains of this method comes from the following list comprehension, which reviews the data list of the quantum circuit, and identifies & removes the requied gate entries as specified by the user.
+The function then returns an updated quantum circuit.
 
 ## Next steps
+We would like to follow the object orientated style of the qiskit source code. This requires us to create the above method as a class inheriting from quantumcircuit and returning a removed_gates type object. This will allow us to:
+* Reduce the amount of content in the quantumcircuit.py file given that it is already very large
+* Keep to the convention of the qiskit source code such that our contribution fits nicely
+* Take advantage of the object orientated structure of qiskit when we look to expand our contribution to more features. There are many more ways a user may want to remove gates from a circuit, each worthy of their own method.
 
 ## Future work and outlook
+Removing gates is the simplest form of amending an existing quantum circuit
 
 
 
