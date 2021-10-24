@@ -2239,80 +2239,46 @@ class QuantumCircuit:
         gates_to_remove: Optional[
             Union[  
                 str,  
-                int,
                 list,
                 ]
         ] = None,
-        include_control: bool = True,
         qubits: Optional[
             Union[
-                list, 
                 int,
+                list, 
             ]
         ] = None,):
-        """Removes certain gates from quantumcircuit, specified by name or index of the gate.
+        """Removes certain gates from certain qubits of the QuantumCircuit and return the 
+        adapted QuantumCircuit with the deleted gates.
 
         Args:
-            gates_to_remove (str, int, list(str) or list(int)): optional subset of gates to
-            remove from quantumcircuit.
-            Defaults to all gates in circuit.
+            gates_to_remove (str or list(str)): optional subset of gates to
+            remove from QuantumCircuit, defaults to all gates in circuit.
+            qubits (int or list(int)): specify qubits from which the gates should be removed 
 
         Returns:
-            Adapted quatumcircuit with removed gates
+            Adapted QuatumCircuit object with removed gates
         """
 
         circuit = self.copy()
-
-        # Remove all gates if none are specified
-        if gates_to_remove==None and qubits == None:
-            circuit.data = []
-
-        # Remove all gates of a certain name
-        if type(gates_to_remove)==str:
-            [
-                circuit.data.pop(i)
-                for i in list(range(len(circuit.data)))[::-1]
-                if circuit.data[i][0].name == gates_to_remove
-            ]
-
-        # Remove gate at specified index
-        if type(gates_to_remove)==int:
-            circuit.data.pop(gates_to_remove)
-
-        # Remove all gates with names or indices contained in gates_to_remove list
-        if type(gates_to_remove)==list:
-            # Remove all gates with names in gates_to_remove
-            if type(gates_to_remove[0])==str:
-                [
-                    circuit.data.pop(i)
-                    for i in list(range(len(circuit.data)))[::-1]
-                    if circuit.data[i][0].name in gates_to_remove
-                ]
-            # Remove all gates with indices in gates_to_remove
-            if type(gates_to_remove[0])==int:
-                [
-                    circuit.data.pop(i)
-                    for i in gates_to_remove[::-1]
-                ]     
-
-        # Remove gates on specified qubits
         if type(qubits)==int:
             qubits=[qubits]
-        if include_control:
-            if type(qubits)==list:
-                [
+        if type(gates_to_remove)==str:
+            gates_to_remove=[gates_to_remove]
+        if qubits==None:
+            qubits=list(range(circuit.num_qubits))
+        if gates_to_remove==None:
+            gates_to_remove=list(set(circuit.data[i][0].name for i in range(len(self.data))))       
+
+        # Go through circuit.data containing the instructions and the information which
+        # qubits they are acting on and delete the entry from the data list if a gate should
+        # be removed
+        for i in list(range(len(circuit.data)))[::-1]:
+            for j in list(range(len(circuit.data[i][1])))[::-1]:
+                if (circuit.data[i][1][j].index in qubits and 
+                    circuit.data[i][0].name in gates_to_remove):
                     circuit.data.pop(i)
-                    for i in list(range(len(circuit.data)))[::-1]
-                    for j in list(range(len(circuit.data[i][1])))[::-1]
-                    if circuit.data[i][1][j].index in qubits
-                ]
-        else:
-            if type(qubits)==list:
-                [
-                    circuit.data.pop(i)
-                    for i in list(range(len(circuit.data)))[::-1]
-                    if circuit.data[i][1][-1].index in qubits
-                ]
+                    break
 
         return circuit
 
