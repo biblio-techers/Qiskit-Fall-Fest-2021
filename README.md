@@ -6,7 +6,11 @@
 Qiskit is made up of elements that work together to enable quantum computing. This element is **Terra** and is the foundation on which the rest of Qiskit is built.
 
 # PushQuantum Hackathon Presentation
-We have cloned from the original Qiskit Terra repository and added new functionality to remove targeted gates from a pre-defined quantum circuit. This new functionality can be found in the quantumcircuit.py file in the remove_gates method.
+We have cloned from the original Qiskit Terra repository and added new functionality to:
+* remove targeted gates from a pre-defined quantum circuit,
+    * qiskit/circuit/quantumcircuit.py - def remove_gates()
+* implement a QFT circuit in its fully expanded form.
+    * qiskit/circuit/library/basis_change/qft.py
 
 ## How did we get here?
 Our initial idea was to add functionality to enable users to expand the quantum circuit drawing of a base circuit (e.g. QFT) from a
