@@ -36,6 +36,7 @@ from typing import (
 )
 import typing
 import numpy as np
+from qiskit.circuit import gate
 from qiskit.exceptions import QiskitError, MissingOptionalLibraryError
 from qiskit.utils.multiprocessing import is_main_process
 from qiskit.circuit.instruction import Instruction
@@ -2233,6 +2234,54 @@ class QuantumCircuit:
             return circ
         else:
             return None
+
+    def remove_gates(
+        self,
+        gates_to_remove: Optional[
+            Union[ 
+                Sequence[str], 
+                str, 
+                Sequence[int], 
+                int,
+                Sequence[Type[Qubit]],
+                Type[Qubit],
+                Sequence[Type[Tuple[Qubit,int]]],
+                Type[Tuple[Qubit,int]],
+                ]
+        ] = None,):
+        # Remove all gates if none are specified
+        if gates_to_remove==None:
+            self.data = []
+        if type(gates_to_remove)==Sequence[str]:
+            [
+                self.data.pop(i)
+                for i in list(range(len(self.data)))[::-1]
+                if self.data[i][0].name in gates_to_remove
+            ]
+        # Remove all gates of a certain name
+        if type(gates_to_remove)==str:
+            [
+                self.data.pop(i)
+                for i in list(range(len(self.data)))[::-1]
+                if self.data[i][0].name == gates_to_remove
+            ]
+        # Remove gates at specified indexes
+        if type(gates_to_remove)==Sequence[int]:
+            [
+                self.data.pop(i)
+                for i in gates_to_remove[::-1]
+            ]
+        # Remove gate at specified index
+        if type(gates_to_remove)==int:
+            self.data.pop(gates_to_remove)
+        # Remove gates on specified qubits at specific locations
+        if 
+        #try:
+        #    self.data.pop(gates_to_remove)
+        #except IndexError:
+        #    print("IndexError: Gate cannot be found, skipping removal.")
+
+
 
     @staticmethod
     def from_qasm_file(path: str) -> "QuantumCircuit":

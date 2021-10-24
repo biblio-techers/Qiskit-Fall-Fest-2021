@@ -97,10 +97,6 @@ class QFT(BlueprintCircuit):
             name: The name of the circuit.
         """
 
-        #####
-        print("Hello_init")
-        #####
-
         if name is None:
             name = "IQFT" if inverse else "QFT"
 
@@ -285,7 +281,6 @@ class QFT(BlueprintCircuit):
             return
 
         circuit = QuantumCircuit(*self.qregs, name=self.name)
-        print("hello_build")
         
         for j in reversed(range(num_qubits)):
             circuit.h(j)
