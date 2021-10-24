@@ -59,7 +59,6 @@ from .quantumcircuitdata import QuantumCircuitData
 from .delay import Delay
 from .measure import Measure
 from .reset import Reset
-
 try:
     import pygments
     from pygments.formatters import Terminal256Formatter  # pylint: disable=no-name-in-module
@@ -2237,83 +2236,66 @@ class QuantumCircuit:
             return None
 
     def remove_gates(
-        self,
-        include_control: bool = True,
+        self, 
         gates_to_remove: Optional[
-            Union[ 
-                list, 
+            Union[  
                 str,  
-                int,
+                list,
                 ]
         ] = None,
         qubits: Optional[
             Union[
-                list, 
                 int,
+                list, 
             ]
-        ] = None,
-    ):
-        # Remove all gates if none are specified
-        if gates_to_remove==None and qubits == None:
-            self.data = []
-        if type(gates_to_remove)==Sequence[str]:
-            [
-                self.data.pop(i)
-                for i in list(range(len(self.data)))[::-1]
-                if self.data[i][0].name in gates_to_remove
-            ]
-        # Remove all gates of a certain name
+        ] = None,):
+        """Removes certain gates from certain qubits of the QuantumCircuit and return the 
+        adapted QuantumCircuit with the deleted gates.
+        Args:
+            gates_to_remove (str or list(str)): optional subset of gates to
+            remove from QuantumCircuit, defaults to all gates in circuit.
+            qubits (int or list(int)): specify qubits from which the gates should be removed 
+        Returns:
+            Adapted QuatumCircuit object with removed gates
+        """
+
+        circuit = self.copy()
+        all_gates=list(set(circuit.data[i][0].name for i in range(len(self.data)))) 
+        if type(qubits)==int:
+            qubits=[qubits]
         if type(gates_to_remove)==str:
-            [
-                self.data.pop(i)
-                for i in list(range(len(self.data)))[::-1]
-                if self.data[i][0].name == gates_to_remove
-            ]
-        # Remove gates at specified indexes
-        if type(gates_to_remove)==Sequence[int]:
-            [
-                self.data.pop(i)
-                for i in gates_to_remove[::-1]
-            ]
-        # Remove gate at specified index
-        if type(gates_to_remove)==int:
-            self.data.pop(gates_to_remove)
-        # Remove gates on specified qubit
-        if include_control:
-            if type(qubits)==int:
-                [
-                    self.data.pop(i)
-                    for i in list(range(len(self.data)))[::-1]
-                    for j in list(range(len(self.data[i][1])))
-                    if self.data[i][1][j].index == qubits
-                ]
-        else:
-            if type(qubits)==int:
-                [
-                    self.data.pop(i)
-                    for i in list(range(len(self.data)))[::-1]
-                    if self.data[i][1][-1].index == qubits
-                ]
-        # Remove gates on specified qubits
-        if include_control:
-            if type(qubits)==list:
-                [
-                    self.data.pop(i)
-                    for i in list(range(len(self.data)))[::-1]
-                    for j in list(range(len(self.data[i][1])))[::-1]
-                    if self.data[i][1][j].index in qubits
-                ]
-        else:
-            if type(qubits)==list:
-                [
-                    self.data.pop(i)
-                    for i in list(range(len(self.data)))[::-1]
-                    if self.data[i][1][-1].index in qubits
-                ]
-        #try:
-        #    self.data.pop(gates_to_remove)
-        #except IndexError:
-        #    print("IndexError: Gate cannot be found, skipping removal.")
+            gates_to_remove=[gates_to_remove]
+        if qubits==None:
+            qubits=list(range(circuit.num_qubits))
+        if gates_to_remove==None:
+            try:
+                gates_to_remove=all_gates      
+            except IndexError:
+                print("Your circuit is already empty.")
+        missing_gates=[]
+        for gate in gates_to_remove:
+            if gate not in all_gates:
+                missing_gates.append(gate)
+        if len(missing_gates)!=0:
+            print(f"WARNING: Gates: {missing_gates} are not present in your circuit. Your ciruit\
+            only contains the following gates: {all_gates}.")
+        # Go through circuit.data containing the instructions and the information which
+        # qubits they are acting on and delete the entry from the data list if a gate should
+        # be removed. (i,j) lists run in reverse order to avoid index jumping.
+        try:
+            for i in list(range(len(circuit.data)))[::-1]:
+                for j in list(range(len(circuit.data[i][1])))[::-1]:
+                    if (circuit.data[i][1][j].index in qubits and 
+                        circuit.data[i][0].name in gates_to_remove):
+                        circuit.data.pop(i)
+                        break
+
+            return circuit
+        except IndexError:
+            print("IndexError: Check the number of qubits in your circuit.")
+        except TypeError:
+            print("TypeError: Check the type requirements of the remove_gates arguments.")
+
 
 
 
