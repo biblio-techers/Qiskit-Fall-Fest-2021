@@ -5,7 +5,7 @@
 
 Qiskit is made up of elements that work together to enable quantum computing. This element is **Terra** and is the foundation on which the rest of Qiskit is built.
 
-# PushQuantum Hackathon
+# PushQuantum Hackathon Presentation
 We have cloned from the original Qiskit Terra repository and added new functionality to remove targeted gates from a pre-defined quantum circuit. This new functionality can be found in the quantumcircuit.py file in the remove_gates method.
 
 ## How did we get here?
@@ -40,7 +40,11 @@ We would like to follow the object orientated style of the qiskit source code. T
 * Take advantage of the object orientated structure of qiskit when we look to expand our contribution to more features. There are many more ways a user may want to remove gates from a circuit, each worthy of their own method.
 
 ## Future work and outlook
-Removing gates is the simplest form of amending an existing quantum circuit
+Removing gates is the simplest form of amending an existing quantum circuit given that it is well defined and has finite implementations. However, it would also be benifitial to the user to have a similar class/method to conduct other ciruit altering functions such as:
+* Swapping gates,
+* Adding gates at specified locations,
+* Duplicating gates
+After implementing the remove gates functionality as a class we look to extend this to the above use cases for as broad as possible implementation and potentially provide it as a mini feature update to the main qiskit-terra source code. We also welcome feedback and other ideas of analogous features to implement.
 
 
 
