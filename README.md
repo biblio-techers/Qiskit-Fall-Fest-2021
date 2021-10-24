@@ -11,7 +11,7 @@ We have cloned from the original Qiskit Terra repository and added new functiona
 ## How did we get here?
 Our initial idea was to add functionality to enable users to expand the quantum circuit drawing of a base circuit (e.g. QFT) from a
 building block to a full display form. For example:
-![Image of QFT Full/Compact](https://octodex.github.com/images/yaktocat.png)
+![Image of QFT Full/Compact](https://github.com/biblio-techers/Qiskit-Fall-Fest-2021/blob/nadeem_develop/Images/Example_Of_Decomposition.png)
 As a next step we wanted to enable this functionality in the general case, and hence apply it to the quantum circuit class. This was 
 when we realised that this functionality already exists in the form of the decompose method. However, this decompose method also
 decomposes the Hadamard gates for our QFT example, so there are some minor differences.
