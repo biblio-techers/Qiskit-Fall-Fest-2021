@@ -5,6 +5,31 @@
 
 Qiskit is made up of elements that work together to enable quantum computing. This element is **Terra** and is the foundation on which the rest of Qiskit is built.
 
+# PushQuantum Hackathon
+We have cloned from the original Qiskit Terra repository and added new functionality to remove targeted gates from a pre-defined quantum circuit. This new functionality can be found in the quantumcircuit.py file in the remove_gates method.
+
+## How did we get here?
+Our initial idea was to add functionality to enable users to expand the quantum circuit drawing of a base circuit (e.g. QFT) from a
+building block to a full display form. For example:
+![Image of QFT Full/Compact](https://octodex.github.com/images/yaktocat.png)
+As a next step we wanted to enable this functionality in the general case, and hence apply it to the quantum circuit class. This was 
+when we realised that this functionality already exists in the form of the decompose method. However, this decompose method also
+decomposes the Hadamard gates for our QFT example, so there are some minor differences.
+## If at first, you don't succeed... try something else
+Given that this functionality had already been implemented, we continued with our extension idea: "Provide a clean and friendly way to 
+allow users to remove targeted gates from their quantum circuits". There is a brief discussion of how to currently do this in:
+https://arxiv.org/abs/1903.04359
+The advise in lesson 2 is to directly edit the quantumcircuit.data list based on the index of the gate that you want to move. This can be a complex thought process for the user and it is much more intuitive to pick a gate from the diagram that you want to remove. This becomes even more apparent when you consider the indexing structure of the data list is not unique if it contains single qubit gates.
+## Functionality of the remove_gate method
+
+## Next steps
+
+## Future work and outlook
+
+
+
+# Standard README.md documentation from Qiskit
+
 ## Installation
 
 We encourage installing Qiskit via the pip tool (a python package manager), which installs all Qiskit elements, including Terra.
