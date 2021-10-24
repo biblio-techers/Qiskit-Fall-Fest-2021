@@ -36,6 +36,7 @@ from typing import (
 )
 import typing
 import numpy as np
+from pygments.lexer import include
 from qiskit.circuit import gate
 from qiskit.exceptions import QiskitError, MissingOptionalLibraryError
 from qiskit.utils.multiprocessing import is_main_process
@@ -2237,20 +2238,23 @@ class QuantumCircuit:
 
     def remove_gates(
         self,
+        include_control: bool = True,
         gates_to_remove: Optional[
             Union[ 
-                Sequence[str], 
-                str, 
-                Sequence[int], 
+                list, 
+                str,  
                 int,
-                Sequence[Type[Qubit]],
-                Type[Qubit],
-                Sequence[Type[Tuple[Qubit,int]]],
-                Type[Tuple[Qubit,int]],
                 ]
-        ] = None,):
+        ] = None,
+        qubits: Optional[
+            Union[
+                list, 
+                int,
+            ]
+        ] = None,
+    ):
         # Remove all gates if none are specified
-        if gates_to_remove==None:
+        if gates_to_remove==None and qubits == None:
             self.data = []
         if type(gates_to_remove)==Sequence[str]:
             [
@@ -2274,8 +2278,38 @@ class QuantumCircuit:
         # Remove gate at specified index
         if type(gates_to_remove)==int:
             self.data.pop(gates_to_remove)
-        # Remove gates on specified qubits at specific locations
-        if 
+        # Remove gates on specified qubit
+        if include_control:
+            if type(qubits)==int:
+                [
+                    self.data.pop(i)
+                    for i in list(range(len(self.data)))[::-1]
+                    for j in list(range(len(self.data[i][1])))
+                    if self.data[i][1][j].index == qubits
+                ]
+        else:
+            if type(qubits)==int:
+                [
+                    self.data.pop(i)
+                    for i in list(range(len(self.data)))[::-1]
+                    if self.data[i][1][-1].index == qubits
+                ]
+        # Remove gates on specified qubits
+        if include_control:
+            if type(qubits)==list:
+                [
+                    self.data.pop(i)
+                    for i in list(range(len(self.data)))[::-1]
+                    for j in list(range(len(self.data[i][1])))[::-1]
+                    if self.data[i][1][j].index in qubits
+                ]
+        else:
+            if type(qubits)==list:
+                [
+                    self.data.pop(i)
+                    for i in list(range(len(self.data)))[::-1]
+                    if self.data[i][1][-1].index in qubits
+                ]
         #try:
         #    self.data.pop(gates_to_remove)
         #except IndexError:
